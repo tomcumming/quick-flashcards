@@ -2,7 +2,7 @@ export type SavedData = {
   nextUnique: number;
 
   cardTypes: { [id: number]: CardType };
-  cardGroups: { [id: number]: Card };
+  cardGroups: { [id: number]: CardGroup };
 };
 
 export enum QuestionType {

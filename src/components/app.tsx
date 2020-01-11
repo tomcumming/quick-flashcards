@@ -2,6 +2,7 @@ import * as React from "react";
 
 import MainMenu from "./mainmenu";
 import CardTypes from "./card-types";
+import CardGroups from "./card-groups";
 import EditCardType from "./edit-card-type";
 import {
   QuestionType,
@@ -15,7 +16,9 @@ import useData from "../hooks/data";
 type State =
   | { type: "main-menu" }
   | { type: "card-types" }
-  | { type: "edit-card-type"; id: "new" | number };
+  | { type: "card-groups" }
+  | { type: "edit-card-type"; id: "new" | number }
+  | { type: "edit-card-group"; id: "new" | number };
 
 const initialAppState: State = { type: "main-menu" };
 
@@ -28,7 +31,7 @@ export default function App({}: {}) {
     return (
       <MainMenu
         onEditCardTypes={() => setState({ type: "card-types" })}
-        onEditCardGroups={() => alert("edit card groups")}
+        onEditCardGroups={() => setState({ type: "card-groups" })}
         onStudy={() => alert("on study")}
       />
     );
@@ -38,6 +41,14 @@ export default function App({}: {}) {
         cardTypes={data.cardTypes}
         onBack={() => setState({ type: "main-menu" })}
         onEdit={id => setState({ type: "edit-card-type", id })}
+      />
+    );
+  } else if (state.type === "card-groups") {
+    return (
+      <CardGroups
+        cardGroups={data.cardGroups}
+        onBack={() => setState({ type: "main-menu" })}
+        onEdit={id => setState({ type: "edit-card-group", id })}
       />
     );
   } else if (state.type === "edit-card-type") {
