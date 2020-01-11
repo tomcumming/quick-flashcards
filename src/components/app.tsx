@@ -1,15 +1,15 @@
 import * as React from "react";
 
+import MainMenu from "./mainmenu";
 import EditCardType from "./edit-card-type";
 import { QuestionType, emptyCardType, CardType, freshId } from "../data";
 import useData from "../hooks/data";
 
-type State = { type: "edit-card-type"; id: "new" | number };
+type State =
+  | { type: "main-menu" }
+  | { type: "edit-card-type"; id: "new" | number };
 
-const initialAppState: State = {
-  type: "edit-card-type",
-  id: "new"
-};
+const initialAppState: State = { type: "main-menu" };
 
 export default function App({}: {}) {
   const [data, setData] = useData();
@@ -30,7 +30,15 @@ export default function App({}: {}) {
     [data, setData]
   );
 
-  if (state.type === "edit-card-type") {
+  if (state.type === "main-menu") {
+    return (
+      <MainMenu
+        onEditCardTypes={() => alert("edit card types")}
+        onEditCardGroups={() => alert("edit card groups")}
+        onStudy={() => alert("on study")}
+      />
+    );
+  } else if (state.type === "edit-card-type") {
     const card = state.id === "new" ? emptyCardType : data.cardTypes[state.id];
 
     return (

@@ -24,6 +24,7 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
+  min-height: 100vh;
 }
 
 .quick-flashcards header {
@@ -36,6 +37,13 @@ body {
   background-color: var(--background2);
 
   margin-bottom: var(--stardard-padding);
+}
+
+.quick-flashcards header .title {
+  flex-grow: 1;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
 .quick-flashcards header button {
@@ -86,4 +94,23 @@ body {
 .quick-flashcards form input[type="text"],
 .quick-flashcards form select {
   padding: var(--stardard-padding);
+}
+
+.quick-flashcards .main-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+
+  padding: var(--stardard-padding);
+}
+
+.quick-flashcards .main-menu button {
+  margin: var(--stardard-padding);
+  border: none;
+  background: var(--background2);
+  padding: var(--stardard-padding);
+  border-radius: var(--stardard-padding);
+  font-weight: bold;
+  color: var(--text);
 }

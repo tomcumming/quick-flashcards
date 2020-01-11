@@ -36,7 +36,7 @@ export default function EditCardType({
   );
 
   return (
-    <React.Fragment>
+    <>
       <Header onBack={onBack} />
 
       <form onSubmit={onFormSubmit}>
@@ -94,6 +94,6 @@ export default function EditCardType({
         </div>
         <input type="submit" value="save" />
       </form>
-    </React.Fragment>
+    </>
   );
 }
