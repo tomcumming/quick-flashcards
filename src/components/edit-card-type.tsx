@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import Header from "./header";
 import useVoices from "../hooks/voices";
 import { CardType, QuestionType } from "../data";
 
@@ -36,7 +37,7 @@ export default function EditCardType({
 
   return (
     <React.Fragment>
-      <button onClick={onBack}>Go Back</button>
+      <Header onBack={onBack} />
 
       <form onSubmit={onFormSubmit}>
         <div className="edit-group">
