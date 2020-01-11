@@ -1,13 +1,47 @@
 import * as React from "react";
 
 import EditCardType from "./edit-card-type";
-import { QuestionType } from "../data";
+import { QuestionType, emptyCardType, CardType, freshId } from "../data";
+import useData from "../hooks/data";
+
+type State = { type: "edit-card-type"; id: "new" | number };
+
+const initialAppState: State = {
+  type: "edit-card-type",
+  id: "new"
+};
 
 export default function App({}: {}) {
-  return (
-    <EditCardType
-      cardTypeId="new"
-      initialValue={{ name: "", questionType: QuestionType["show-and-speak"] }}
-    />
+  const [data, setData] = useData();
+
+  const [state, setState] = React.useState(initialAppState);
+
+  const onSaveCardType = React.useCallback(
+    (id: "new" | number, cardType: CardType) => {
+      let [data2, id2] = id === "new" ? freshId(data) : [data, id];
+
+      const cardTypes = {
+        ...data2.cardTypes,
+        [id2]: cardType
+      };
+
+      setData({ ...data2, cardTypes });
+    },
+    [data, setData]
   );
+
+  if (state.type === "edit-card-type") {
+    const card = state.id === "new" ? emptyCardType : data.cardTypes[state.id];
+
+    return (
+      <EditCardType
+        cardTypeId={state.id}
+        initialValue={card}
+        onConfirm={onSaveCardType}
+        onBack={() => alert("back pressed")}
+      />
+    );
+  } else {
+    throw new Error("Unknown app state");
+  }
 }

@@ -6,9 +6,9 @@ export type SavedData = {
 };
 
 export enum QuestionType {
-  "show" = "Show",
-  "speak" = "Speak",
-  "show-and-speak" = "Show and speak"
+  "Show" = "show",
+  "Speak" = "speak",
+  "Show and speak" = "show-and-speak"
 }
 
 export type CardType = {
@@ -30,3 +30,18 @@ export type Card = {
   question: string;
   answer: string;
 };
+
+export const defaultSavedData: SavedData = {
+  nextUnique: 1,
+  cardTypes: {},
+  cardGroups: {}
+};
+
+export const emptyCardType: CardType = {
+  name: "",
+  questionType: QuestionType["Show and speak"]
+};
+
+export function freshId(data: SavedData): [SavedData, number] {
+  return [{ ...data, nextUnique: data.nextUnique + 1 }, data.nextUnique];
+}

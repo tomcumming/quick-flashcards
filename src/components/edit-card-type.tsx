@@ -8,9 +8,16 @@ const noVoiceSelected = "__none";
 export type Props = {
   cardTypeId: "new" | number;
   initialValue: CardType;
+  onConfirm: (id: "new" | number, cardType: CardType) => void;
+  onBack: () => void;
 };
 
-export default function EditCardType({ initialValue }: Props) {
+export default function EditCardType({
+  cardTypeId,
+  initialValue,
+  onConfirm,
+  onBack
+}: Props) {
   const [currentValue, setCurrentValue] = React.useState(initialValue);
 
   const voices = useVoices();
@@ -19,11 +26,19 @@ export default function EditCardType({ initialValue }: Props) {
       ? noVoiceSelected
       : currentValue.voiceUri;
 
+  const onFormSubmit = React.useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      onConfirm(cardTypeId, currentValue);
+    },
+    [cardTypeId, currentValue]
+  );
+
   return (
     <React.Fragment>
-      <button>Go Back</button>
+      <button onClick={onBack}>Go Back</button>
 
-      <form>
+      <form onSubmit={onFormSubmit}>
         <div className="edit-group">
           <label>Name</label>
           <input
@@ -46,8 +61,8 @@ export default function EditCardType({ initialValue }: Props) {
             }
           >
             {Object.entries(QuestionType).map(([t, l]) => (
-              <option key={t} value={t}>
-                {l}
+              <option key={l} value={l}>
+                {t}
               </option>
             ))}
           </select>
@@ -76,6 +91,7 @@ export default function EditCardType({ initialValue }: Props) {
             ))}
           </select>
         </div>
+        <input type="submit" value="save" />
       </form>
     </React.Fragment>
   );
