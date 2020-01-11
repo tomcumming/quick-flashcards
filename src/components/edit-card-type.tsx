@@ -39,8 +39,8 @@ export default function EditCardType({
     <>
       <Header onBack={onBack} />
 
-      <form onSubmit={onFormSubmit}>
-        <div className="edit-group">
+      <form onSubmit={onFormSubmit} className="vertical-stretch">
+        <div className="edit-group vertical-stretch">
           <label>Name</label>
           <input
             type="text"
@@ -50,7 +50,7 @@ export default function EditCardType({
             }
           />
         </div>
-        <div className="edit-group">
+        <div className="edit-group vertical-stretch">
           <label>Question Type</label>
           <select
             value={currentValue.questionType}
@@ -68,7 +68,7 @@ export default function EditCardType({
             ))}
           </select>
         </div>
-        <div className="edit-group">
+        <div className="edit-group vertical-stretch">
           <label>Speech Voice</label>
           <select
             value={selectedVoiceUri}

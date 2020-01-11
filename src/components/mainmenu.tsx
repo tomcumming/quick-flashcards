@@ -16,10 +16,16 @@ export default function MainMenu({
   return (
     <>
       <Header />
-      <div className="main-menu">
-        <button onClick={onEditCardTypes}>Card Types</button>
-        <button onClick={onEditCardGroups}>Card Groups</button>
-        <button onClick={onStudy}>Study</button>
+      <div className="main-menu vertical-stretch">
+        <button onClick={onEditCardTypes} className="full-width">
+          Card Types
+        </button>
+        <button onClick={onEditCardGroups} className="full-width">
+          Card Groups
+        </button>
+        <button onClick={onStudy} className="full-width">
+          Study
+        </button>
       </div>
     </>
   );
