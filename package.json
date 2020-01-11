@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "start": "parcel serve src/index.html --no-hmr",
+    "format": "prettier --write \"src/**/*\" package.json tsconfig.json"
+  },
+  "devDependencies": {
+    "parcel": "^1.12.4",
+    "prettier": "^1.19.1",
+    "typescript": "^3.7.4"
+  },
+  "browserlist": [
+    "last 1 Chrome versions",
+    "last 1 Firefox versions",
+    "last 1 Safari versions"
+  ]
+}
