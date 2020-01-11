@@ -8,6 +8,9 @@ body {
   --background: #eee;
   --background2: #aaa;
   --text: black;
+
+  --add-bg: green;
+  --add-fg: white;
 }
 
 .quick-flashcards {
@@ -77,6 +80,11 @@ body {
   color: var(--text);
 }
 
+.quick-flashcards button.add {
+  background-color: var(--add-bg);
+  color: var(--add-fg);
+}
+
 .quick-flashcards form {
   padding: var(--stardard-padding);
 }
@@ -112,4 +120,11 @@ body {
   justify-content: flex-start;
 
   padding: var(--stardard-padding);
+}
+
+.quick-flashcards .edit-card {
+  background-color: var(--background2);
+  padding: var(--stardard-padding);
+  border-radius: var(--stardard-padding);
+  margin-bottom: var(--stardard-padding);
 }

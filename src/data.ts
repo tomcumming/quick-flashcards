@@ -42,6 +42,11 @@ export const emptyCardType: CardType = {
   questionType: QuestionType["Show and speak"]
 };
 
+export const emptyCardGroup: CardGroup = {
+  name: "",
+  cards: {}
+};
+
 export function freshId(data: SavedData): [SavedData, number] {
   return [{ ...data, nextUnique: data.nextUnique + 1 }, data.nextUnique];
 }

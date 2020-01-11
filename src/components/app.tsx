@@ -4,12 +4,15 @@ import MainMenu from "./mainmenu";
 import CardTypes from "./card-types";
 import CardGroups from "./card-groups";
 import EditCardType from "./edit-card-type";
+import EditCardGroup from "./edit-card-group";
 import {
   QuestionType,
   emptyCardType,
   CardType,
   freshId,
-  SavedData
+  SavedData,
+  CardGroup,
+  emptyCardGroup
 } from "../data";
 import useData from "../hooks/data";
 
@@ -60,6 +63,15 @@ export default function App({}: {}) {
         setState={setState}
       />
     );
+  } else if (state.type === "edit-card-group") {
+    return (
+      <EditCardGroupScreen
+        data={data}
+        setData={setData}
+        id={state.id}
+        setState={setState}
+      />
+    );
   } else {
     throw new Error("Unknown app state");
   }
@@ -99,6 +111,52 @@ function EditCardTypeScreen({
       initialValue={card}
       onConfirm={onSaveCardType}
       onBack={() => setState({ type: "card-types" })}
+    />
+  );
+}
+
+function EditCardGroupScreen({
+  data,
+  setData,
+  id,
+  setState
+}: {
+  data: SavedData;
+  setData: (data: SavedData) => void;
+  id: "new" | number;
+  setState: (state: State) => void;
+}) {
+  const onSaveCardGroup = React.useCallback(
+    (id: "new" | number, cardGroup: CardGroup) => {
+      let [data2, id2] = id === "new" ? freshId(data) : [data, id];
+
+      const cardGroups = {
+        ...data2.cardGroups,
+        [id2]: cardGroup
+      };
+
+      setData({ ...data2, cardGroups });
+      setState({ type: "card-groups" });
+    },
+    [data, setData]
+  );
+
+  const makeFreshId = React.useCallback(() => {
+    const [data2, id] = freshId(data);
+    setData(data2);
+    return id;
+  }, [data, setData]);
+
+  const group = id === "new" ? emptyCardGroup : data.cardGroups[id];
+
+  return (
+    <EditCardGroup
+      groupId={id}
+      initialValue={group}
+      cardTypes={data.cardTypes}
+      freshId={makeFreshId}
+      onConfirm={onSaveCardGroup}
+      onBack={() => setState({ type: "card-groups" })}
     />
   );
 }
