@@ -97,20 +97,20 @@ body {
   color: var(--remove-fg);
 }
 
-.quick-flashcards form {
+.quick-flashcards .form {
   padding: var(--stardard-padding);
 }
 
-.quick-flashcards form .edit-group {
+.quick-flashcards .form .edit-group {
   padding: var(--stardard-padding);
 }
 
-.quick-flashcards form label {
+.quick-flashcards .form label {
   font-weight: bold;
   text-transform: capitalize;
 }
 
-.quick-flashcards form input[type="submit"] {
+.quick-flashcards .form .submit {
   align-self: flex-end;
 
   background: var(--background2);
@@ -123,8 +123,8 @@ body {
   text-transform: capitalize;
 }
 
-.quick-flashcards form input[type="text"],
-.quick-flashcards form select {
+.quick-flashcards .form input[type="text"],
+.quick-flashcards .form select {
   padding: var(--stardard-padding);
 }
 

@@ -26,10 +26,7 @@ export default function EditCardGroup({
   const [currentValue, setCurrentValue] = React.useState(initialValue);
 
   const onFormSubmit = React.useCallback(
-    (e: React.FormEvent) => {
-      e.preventDefault();
-      onConfirm(groupId, currentValue);
-    },
+    () => onConfirm(groupId, currentValue),
     [groupId, currentValue]
   );
 
@@ -62,7 +59,7 @@ export default function EditCardGroup({
   return (
     <>
       <Header onBack={onBack} />
-      <form onSubmit={onFormSubmit} className="vertical-stretch">
+      <div className="vertical-stretch form">
         {groupId === "new" ? (
           undefined
         ) : (
@@ -99,8 +96,10 @@ export default function EditCardGroup({
           Add new card
         </button>
 
-        <input type="submit" value="save" />
-      </form>
+        <button className="submit" onClick={onFormSubmit}>
+          Save
+        </button>
+      </div>
     </>
   );
 }

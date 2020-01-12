@@ -32,10 +32,7 @@ export default function EditCardType({
       : currentValue.voiceUri;
 
   const onFormSubmit = React.useCallback(
-    (e: React.FormEvent) => {
-      e.preventDefault();
-      onConfirm(cardTypeId, currentValue);
-    },
+    () => onConfirm(cardTypeId, currentValue),
     [cardTypeId, currentValue]
   );
 
@@ -46,7 +43,7 @@ export default function EditCardType({
   return (
     <>
       <Header onBack={onBack} />
-      <form onSubmit={onFormSubmit} className="vertical-stretch">
+      <div className="form vertical-stretch">
         {cardTypeId === "new" ? (
           undefined
         ) : (
@@ -111,8 +108,10 @@ export default function EditCardType({
             ))}
           </select>
         </div>
-        <input type="submit" value="save" />
-      </form>
+        <button className="submit" onClick={onFormSubmit}>
+          Save
+        </button>
+      </div>
     </>
   );
 }
