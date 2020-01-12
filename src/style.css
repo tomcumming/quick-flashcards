@@ -11,6 +11,9 @@ body {
 
   --add-bg: green;
   --add-fg: white;
+
+  --remove-bg: red;
+  --remove-fg: white;
 }
 
 .quick-flashcards {
@@ -80,9 +83,18 @@ body {
   color: var(--text);
 }
 
+.quick-flashcards button:disabled {
+  opacity: 0.5;
+}
+
 .quick-flashcards button.add {
   background-color: var(--add-bg);
   color: var(--add-fg);
+}
+
+.quick-flashcards button.remove {
+  background-color: var(--remove-bg);
+  color: var(--remove-fg);
 }
 
 .quick-flashcards form {

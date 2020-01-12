@@ -103,13 +103,26 @@ function EditCardTypeScreen({
     [data, setData]
   );
 
+  const onDelete = React.useCallback(() => {
+    const cardTypes = Object.fromEntries(
+      Object.entries(data.cardTypes).filter(
+        ([ctId, _ct]) => parseInt(ctId) !== id
+      )
+    );
+
+    setData({ ...data, cardTypes });
+    setState({ type: "card-types" });
+  }, [data, setData]);
+
   const card = id === "new" ? emptyCardType : data.cardTypes[id];
 
   return (
     <EditCardType
       cardTypeId={id}
       initialValue={card}
+      cardGroups={data.cardGroups}
       onConfirm={onSaveCardType}
+      onDelete={onDelete}
       onBack={() => setState({ type: "card-types" })}
     />
   );

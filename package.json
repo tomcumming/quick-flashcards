@@ -1,7 +1,8 @@
 {
   "scripts": {
     "start": "parcel serve src/index.html --no-hmr",
-    "format": "prettier --write \"src/**/*\" package.json tsconfig.json"
+    "format": "prettier --write \"src/**/*\" package.json tsconfig.json",
+    "check": "tsc"
   },
   "devDependencies": {
     "@types/react": "^16.9.17",

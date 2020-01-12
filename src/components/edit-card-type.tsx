@@ -2,21 +2,25 @@ import * as React from "react";
 
 import Header from "./header";
 import useVoices from "../hooks/voices";
-import { CardType, QuestionType } from "../data";
+import { CardType, QuestionType, SavedData } from "../data";
 
 const noVoiceSelected = "__none";
 
 export type Props = {
   cardTypeId: "new" | number;
   initialValue: CardType;
+  cardGroups: SavedData["cardGroups"];
   onConfirm: (id: "new" | number, cardType: CardType) => void;
+  onDelete: () => void;
   onBack: () => void;
 };
 
 export default function EditCardType({
   cardTypeId,
   initialValue,
+  cardGroups,
   onConfirm,
+  onDelete,
   onBack
 }: Props) {
   const [currentValue, setCurrentValue] = React.useState(initialValue);
@@ -35,11 +39,26 @@ export default function EditCardType({
     [cardTypeId, currentValue]
   );
 
+  const cardTypeInUse = Object.values(cardGroups).some(g =>
+    Object.values(g.cards).some(c => c.cardTypeId === cardTypeId)
+  );
+
   return (
     <>
       <Header onBack={onBack} />
-
       <form onSubmit={onFormSubmit} className="vertical-stretch">
+        {cardTypeId === "new" ? (
+          undefined
+        ) : (
+          <button
+            className="full-width remove"
+            disabled={cardTypeInUse}
+            onClick={onDelete}
+          >
+            {cardTypeInUse ? `Can't Delete, In Use` : "Delete"}
+          </button>
+        )}
+
         <div className="edit-group vertical-stretch">
           <label>Name</label>
           <input
