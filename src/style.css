@@ -97,6 +97,10 @@ body {
   color: var(--remove-fg);
 }
 
+.quick-flashcards button.toggle {
+  text-align: left;
+}
+
 .quick-flashcards .form {
   padding: var(--stardard-padding);
 }
