@@ -6,7 +6,8 @@ export type Props = {
   groupId: "new" | number;
   initialValue: CardGroup;
   cardTypes: SavedData["cardTypes"];
-  freshId: () => number;
+  freshId: number;
+  onUsedFreshId: () => void;
   onBack: () => void;
   onConfirm: (id: "new" | number, group: CardGroup) => void;
   onDelete: () => void;
@@ -16,13 +17,13 @@ export default function EditCardGroup({
   onBack,
   groupId,
   freshId,
+  onUsedFreshId,
   cardTypes,
   initialValue,
   onConfirm,
   onDelete
 }: Props) {
   const [currentValue, setCurrentValue] = React.useState(initialValue);
-  const [lastFreshId, setLastFreshId] = React.useState(0);
 
   const onFormSubmit = React.useCallback(
     (e: React.FormEvent) => {
@@ -38,8 +39,7 @@ export default function EditCardGroup({
       if (Object.keys(cardTypes).length === 0) {
         alert("You need to make some card types first");
       } else {
-        const nextId = freshId();
-        setLastFreshId(lastFreshId + 1);
+        const nextId = freshId;
         setCurrentValue({
           ...currentValue,
           cards: {
@@ -51,9 +51,10 @@ export default function EditCardGroup({
             }
           }
         });
+        onUsedFreshId();
       }
     },
-    [currentValue, lastFreshId]
+    [currentValue, freshId, onUsedFreshId]
   );
 
   const cards = Object.entries(currentValue.cards);

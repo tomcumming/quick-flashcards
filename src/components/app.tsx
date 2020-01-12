@@ -165,11 +165,9 @@ function EditCardGroupScreen({
     setState({ type: "card-groups" });
   }, [data, setData]);
 
-  const makeFreshId = React.useCallback(() => {
-    const [data2, id] = freshId(data);
-    setData(data2);
-    return id;
-  }, [data, setData]);
+  const onUsedFreshId = React.useCallback(() => {
+    setData({ ...data, nextUnique: data.nextUnique + 1 });
+  }, [data]);
 
   const group = id === "new" ? emptyCardGroup : data.cardGroups[id];
 
@@ -178,7 +176,8 @@ function EditCardGroupScreen({
       groupId={id}
       initialValue={group}
       cardTypes={data.cardTypes}
-      freshId={makeFreshId}
+      freshId={data.nextUnique}
+      onUsedFreshId={onUsedFreshId}
       onConfirm={onSaveCardGroup}
       onBack={() => setState({ type: "card-groups" })}
       onDelete={onDelete}
