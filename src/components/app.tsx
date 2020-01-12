@@ -6,6 +6,7 @@ import CardGroups from "./card-groups";
 import EditCardType from "./edit-card-type";
 import EditCardGroup from "./edit-card-group";
 import StudySetup from "./study-setup";
+import Study from "./study";
 import {
   QuestionType,
   emptyCardType,
@@ -23,7 +24,8 @@ type State =
   | { type: "card-groups" }
   | { type: "edit-card-type"; id: "new" | number }
   | { type: "edit-card-group"; id: "new" | number }
-  | { type: "study-setup" };
+  | { type: "study-setup" }
+  | { type: "study"; groupIds: Set<number> };
 
 const initialAppState: State = { type: "main-menu" };
 
@@ -78,10 +80,17 @@ export default function App({}: {}) {
     return (
       <StudySetup
         onBack={() => setState({ type: "main-menu" })}
-        onStudy={ids =>
-          alert("Studying " + JSON.stringify(Array.from(ids.values())))
-        }
+        onStudy={groupIds => setState({ type: "study", groupIds })}
         cardGroups={data.cardGroups}
+      />
+    );
+  } else if (state.type === "study") {
+    return (
+      <Study
+        onBack={() => setState({ type: "main-menu" })}
+        groupIds={state.groupIds}
+        cardGroups={data.cardGroups}
+        cardTypes={data.cardTypes}
       />
     );
   } else {

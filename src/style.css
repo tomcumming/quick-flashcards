@@ -144,3 +144,35 @@ body {
   border-radius: var(--stardard-padding);
   margin-bottom: var(--stardard-padding);
 }
+
+.quick-flashcards .question {
+  font-size: 2em;
+  text-align: center;
+  padding: var(--stardard-padding);
+}
+
+.quick-flashcards .answer {
+  background-color: var(--background2);
+  font-size: 2em;
+  text-align: center;
+  margin: var(--stardard-padding);
+  padding: var(--stardard-padding);
+  border-radius: var(--stardard-padding);
+}
+
+.quick-flashcards .answer-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+
+  margin: var(--stardard-padding);
+}
+
+.quick-flashcards .answer-buttons button {
+  margin: var(--stardard-padding);
+  border: none;
+  padding: var(--stardard-padding);
+  border-radius: var(--stardard-padding);
+  font-weight: bold;
+  flex-grow: 1;
+}
