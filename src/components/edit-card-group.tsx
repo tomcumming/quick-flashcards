@@ -9,6 +9,7 @@ export type Props = {
   freshId: () => number;
   onBack: () => void;
   onConfirm: (id: "new" | number, group: CardGroup) => void;
+  onDelete: () => void;
 };
 
 export default function EditCardGroup({
@@ -17,7 +18,8 @@ export default function EditCardGroup({
   freshId,
   cardTypes,
   initialValue,
-  onConfirm
+  onConfirm,
+  onDelete
 }: Props) {
   const [currentValue, setCurrentValue] = React.useState(initialValue);
   const [lastFreshId, setLastFreshId] = React.useState(0);
@@ -60,6 +62,14 @@ export default function EditCardGroup({
     <>
       <Header onBack={onBack} />
       <form onSubmit={onFormSubmit} className="vertical-stretch">
+        {groupId === "new" ? (
+          undefined
+        ) : (
+          <button className="full-width remove" onClick={onDelete}>
+            Delete Group
+          </button>
+        )}
+
         <div className="edit-group vertical-stretch">
           <label>Name</label>
           <input
