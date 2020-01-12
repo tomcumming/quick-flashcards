@@ -121,8 +121,24 @@ function EditCard({
     [group, card, id]
   );
 
+  const onDeleteCard = React.useCallback(() => {
+    const cards = Object.fromEntries(
+      Object.entries(group.cards).filter(
+        ([cardId, _c]) => parseInt(cardId) !== id
+      )
+    );
+
+    setGroup({
+      ...group,
+      cards
+    });
+  }, [group, setGroup]);
+
   return (
     <div className="edit-card vertical-stretch">
+      <button className="full-width remove" onClick={onDeleteCard}>
+        Delete Card
+      </button>
       <div className="edit-group vertical-stretch">
         <label>Card Type</label>
         <select
