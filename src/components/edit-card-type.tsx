@@ -98,9 +98,7 @@ export default function EditCardType({
               })
             }
           >
-            <option disabled value={noVoiceSelected}>
-              None selected
-            </option>
+            <option value={noVoiceSelected}>No Text To Speech</option>
             {voices.map(v => (
               <option key={v.voiceURI} value={v.voiceURI}>
                 {v.lang} - {v.name}
