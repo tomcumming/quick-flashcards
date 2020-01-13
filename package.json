@@ -2,7 +2,9 @@
   "scripts": {
     "start": "parcel serve src/index.html --no-hmr",
     "format": "prettier --write \"src/**/*\" package.json tsconfig.json",
-    "check": "tsc"
+    "check": "tsc",
+    "clean": "rm -r dist/* .cache",
+    "build": "parcel build src/index.html --no-source-maps"
   },
   "devDependencies": {
     "@types/react": "^16.9.17",
@@ -11,7 +13,7 @@
     "prettier": "^1.19.1",
     "typescript": "^3.7.4"
   },
-  "browserlist": [
+  "browserslist": [
     "last 1 Chrome versions",
     "last 1 Firefox versions",
     "last 1 Safari versions"
