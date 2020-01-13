@@ -16,8 +16,15 @@ body {
   --remove-fg: white;
 }
 
+.quick-flashcards button,
+.quick-flashcards input,
+.quick-flashcards select {
+  font-size: 1em;
+}
+
 .quick-flashcards {
-  --stardard-padding: 8px;
+  font-size: 6vmin;
+  --stardard-padding: 0.35em;
 
   background-color: var(--background);
   color: var(--text);
