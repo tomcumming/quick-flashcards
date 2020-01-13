@@ -30,15 +30,11 @@ export default function Study({
 
   const onAnswer = React.useCallback(
     (answer: boolean) => {
-      console.log(queue);
       setQueue(advanceQueue(queue, answer));
       setState("asking");
     },
     [queue, setQueue]
   );
-
-  console.log("*", queue.queue);
-  console.log(queue.right);
 
   const currentCard = allCards.current.get(queue.queue[0]) as Card;
   const currentType = cardTypes[currentCard.cardTypeId];
@@ -57,6 +53,7 @@ export default function Study({
           <Showing
             card={currentCard}
             cardType={currentType}
+            studyScore={studyScore(queue)}
             onAnswer={onAnswer}
           />
         )}
@@ -95,12 +92,19 @@ function Asking({
 function Showing({
   card,
   cardType,
+  studyScore,
   onAnswer
 }: {
   card: Card;
   cardType: CardType;
+  studyScore: number | { min: number; total: number };
   onAnswer: (correct: boolean) => void;
 }) {
+  const scoreText =
+    typeof studyScore === "number"
+      ? `${studyScore.toFixed()}%`
+      : `${studyScore.min.toFixed()}% (${studyScore.total.toFixed()}%)`;
+
   return (
     <>
       <div className="question">{card.question}</div>
@@ -119,6 +123,10 @@ function Showing({
           ✔
         </button>
       </div>
+      <p className="study-score">
+        Study score:
+        <strong>{scoreText}</strong>
+      </p>
     </>
   );
 }
@@ -177,4 +185,22 @@ function advanceQueue(queue: QueueState, answeredCorrect: boolean): QueueState {
       right: { ...queue.right, [current]: 0 }
     };
   }
+}
+
+function studyScore(
+  queue: QueueState
+): number | { min: number; total: number } {
+  const min = Object.values(queue.right).reduce(
+    (p, c) => Math.min(p, c),
+    Number.MAX_SAFE_INTEGER
+  );
+  const total = Object.values(queue.right).reduce((p, c) => p + c, 0);
+  const nonZero = Object.values(queue.right).reduce(
+    (p, c) => p + Math.sign(c),
+    0
+  );
+
+  return nonZero < queue.queue.length
+    ? 100 * (nonZero / queue.queue.length)
+    : { min: min * 100, total: 100 * (total / queue.queue.length) };
 }

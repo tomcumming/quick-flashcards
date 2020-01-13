@@ -176,3 +176,8 @@ body {
   font-weight: bold;
   flex-grow: 1;
 }
+
+.quick-flashcards .study-score {
+  text-align: center;
+  margin: var(--stardard-padding);
+}
