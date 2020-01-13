@@ -14,12 +14,8 @@ export type Props = {
 type QuestionState = "asking" | "showing";
 
 type QueueState = {
-  pending: number[];
-  wrong: number[];
-  right: number[];
-
-  current: number;
-  correctInARow: number;
+  queue: number[];
+  right: { [cardId: number]: number };
 };
 
 export default function Study({
@@ -41,7 +37,10 @@ export default function Study({
     [queue, setQueue]
   );
 
-  const currentCard = allCards.current.get(queue.current) as Card;
+  console.log("*", queue.queue);
+  console.log(queue.right);
+
+  const currentCard = allCards.current.get(queue.queue[0]) as Card;
   const currentType = cardTypes[currentCard.cardTypeId];
 
   return (
@@ -137,15 +136,9 @@ function getAllCards(
 }
 
 function newQueueState(allCards: Map<number, Card>): QueueState {
-  const allIds = shuffleQueue(allCards.keys());
-
   return {
-    pending: allIds.slice(1),
-    wrong: [],
-    right: [],
-
-    current: allIds[0],
-    correctInARow: 0
+    queue: shuffleQueue(allCards.keys()),
+    right: Object.fromEntries(Array.from(allCards.keys()).map(id => [id, 0]))
   };
 }
 
@@ -155,41 +148,33 @@ function shuffleQueue(ids: Iterable<number>): number[] {
 }
 
 function advanceQueue(queue: QueueState, answeredCorrect: boolean): QueueState {
-  const correctInARow = answeredCorrect ? queue.correctInARow + 1 : 0;
-  const totalCards =
-    queue.pending.length + queue.wrong.length + queue.right.length + 1;
+  const current = queue.queue[0];
+  const rest = queue.queue.slice(1);
 
-  if (queue.wrong.length > 0) {
+  if (answeredCorrect) {
+    const currentRight = queue.right[current] + 1;
+
+    const right = {
+      ...queue.right,
+      [current]: currentRight
+    };
+
+    rest.splice((currentRight + 1) * 2, 0, current);
+
+    const allRight = Object.values(right).every(x => x > 0);
+    const totalRight = Object.values(right).reduce((p, c) => p + c, 0);
+
     return {
-      pending: queue.pending,
-      wrong: queue.wrong
-        .slice(1)
-        .concat(answeredCorrect ? [] : [queue.current]),
-      right: queue.right.concat(answeredCorrect ? [queue.current] : []),
-
-      current: queue.wrong[0],
-      correctInARow
+      queue:
+        allRight && totalRight % rest.length === 0 ? shuffleQueue(rest) : rest,
+      right
     };
   } else {
-    let next: number;
-    if (queue.pending.length > 0 && queue.right.length > 0)
-      next = correctInARow % 2 === 0 ? queue.pending[0] : queue.right[0];
-    else if (queue.pending.length > 0) next = queue.pending[0];
-    else next = queue.right[0];
-
-    const pending = queue.pending.filter(x => x !== next);
-    const wrong = queue.wrong.concat(answeredCorrect ? [] : [queue.current]);
-    const right = queue.right
-      .concat(answeredCorrect ? [queue.current] : [])
-      .filter(x => x !== next);
+    rest.splice(1, 0, current);
 
     return {
-      pending,
-      wrong,
-      right: correctInARow % totalCards === 0 ? shuffleQueue(right) : right,
-
-      current: next,
-      correctInARow
+      queue: rest,
+      right: { ...queue.right, [current]: 0 }
     };
   }
 }
