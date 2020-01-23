@@ -15,7 +15,7 @@ type QuestionState = "asking" | "showing";
 
 type QueueState = {
   queue: number[];
-  right: { [cardId: number]: number };
+  right: { [cardId: number]: "new" | number };
 };
 
 export default function Study({
@@ -155,28 +155,46 @@ function shuffleQueue(ids: Iterable<number>): number[] {
   return ids2.sort(() => Math.random() - 0.5);
 }
 
+function rightAsCount(right: "new" | number): number {
+  return right === "new" ? 0 : right;
+}
+
+function shuffleIfRequired({ right, queue: rest }: QueueState): QueueState {
+  const allRight = Object.values(right).every(x => rightAsCount(x) > 0);
+  const totalRight = Object.values(right).reduce<number>(
+    (p, c) => p + rightAsCount(c),
+    0
+  );
+
+  return {
+    queue:
+      allRight && totalRight % rest.length === 0 ? shuffleQueue(rest) : rest,
+    right
+  };
+}
+
 function advanceQueue(queue: QueueState, answeredCorrect: boolean): QueueState {
   const current = queue.queue[0];
   const rest = queue.queue.slice(1);
 
   if (answeredCorrect) {
-    const currentRight = queue.right[current] + 1;
+    if (queue.right[current] === "new") {
+      const right = { ...queue.right, [current]: 1 };
+      rest.push(current);
+      // Should i bother with shuffle here?
+      return shuffleIfRequired({ queue: rest, right });
+    } else {
+      const currentRight = rightAsCount(queue.right[current]) + 1;
 
-    const right = {
-      ...queue.right,
-      [current]: currentRight
-    };
+      const right = {
+        ...queue.right,
+        [current]: currentRight
+      };
 
-    rest.splice((currentRight + 1) * 2, 0, current);
+      rest.splice((currentRight + 1) * 2, 0, current);
 
-    const allRight = Object.values(right).every(x => x > 0);
-    const totalRight = Object.values(right).reduce((p, c) => p + c, 0);
-
-    return {
-      queue:
-        allRight && totalRight % rest.length === 0 ? shuffleQueue(rest) : rest,
-      right
-    };
+      return shuffleIfRequired({ queue: rest, right });
+    }
   } else {
     rest.splice(1, 0, current);
 
@@ -190,13 +208,16 @@ function advanceQueue(queue: QueueState, answeredCorrect: boolean): QueueState {
 function studyScore(
   queue: QueueState
 ): number | { min: number; total: number } {
-  const min = Object.values(queue.right).reduce(
-    (p, c) => Math.min(p, c),
+  const min = Object.values(queue.right).reduce<number>(
+    (p, c) => Math.min(p, rightAsCount(c)),
     Number.MAX_SAFE_INTEGER
   );
-  const total = Object.values(queue.right).reduce((p, c) => p + c, 0);
-  const nonZero = Object.values(queue.right).reduce(
-    (p, c) => p + Math.sign(c),
+  const total = Object.values(queue.right).reduce<number>(
+    (p, c) => p + rightAsCount(c),
+    0
+  );
+  const nonZero = Object.values(queue.right).reduce<number>(
+    (p, c) => p + Math.sign(rightAsCount(c)),
     0
   );
 
